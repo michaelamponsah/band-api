@@ -1,19 +1,20 @@
-class MembersController << ApplicationController
+class MembersController < ApplicationController
   before_action :set_member, only: %i[show update destroy] 
 
   # GET /members
   def index
     @members = Member.all
 
-    render json: @members, only: %i[name, band_id]
+    render json: @members, only: %i[name band_id]
   end
 
   # POST /members
   def create
     @member = Member.new(member_params)
+    @member.band_id = params[:band_id]
 
     if @member.save
-      render json: @member, status: :created, location: @member
+      render json: @member, status: :created
     else
       render json: {errors: @member.errors}, status: :unprocessable_entity
     end
